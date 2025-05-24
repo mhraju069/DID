@@ -88,7 +88,7 @@ contract DIDCard is
 
     function remove(uint256 _tokenId) public virtual onlyOwner {
         _burn(_tokenId);
-        emit mintLog(
+        emit deleteLog(
             msg.sender,
             "DID Removed for Employee",
             employee[_tokenId].name,
@@ -116,7 +116,7 @@ contract DIDCard is
         user.isActive = isActive;
 
         _setTokenURI(_tokenId, metadataURI);
-        emit mintLog(
+        emit updateLog(
             msg.sender,
             "DID Updated for Employee",
             name,
