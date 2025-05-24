@@ -1,6 +1,6 @@
 
 
-export default function home() {
+export default function home({ Connect, wallet, contract }) {
     return (
         <>    <div class="container">
             <header>
@@ -8,7 +8,7 @@ export default function home() {
                     <i class="fas fa-id-card"></i>
                     <span>Decentralized Identity (DID)</span>
                 </div>
-                <button id="walletButton" class="wallet-btn">
+                <button type="button" id="walletButton" class="wallet-btn" onClick={Connect}>
                     <i class="fas fa-wallet"></i>
                     Connect Wallet
                 </button>
