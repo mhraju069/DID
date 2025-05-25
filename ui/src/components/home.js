@@ -1,6 +1,12 @@
 
-
-export default function home({ Connect, wallet, contract }) {
+import { useState, useEffect } from 'react';
+export default function Home({ Connect, wallet, contract }) {
+    const [shortAddress, setShortAddress] = useState('');
+    useEffect(() => {
+        if (wallet) {
+            setShortAddress(`${wallet.slice(0, 5)}...${wallet.slice(-4)}`);
+        }
+    }, [wallet]);
     return (
         <>    <div class="container">
             <header>
@@ -10,7 +16,8 @@ export default function home({ Connect, wallet, contract }) {
                 </div>
                 <button type="button" id="walletButton" class="wallet-btn" onClick={Connect}>
                     <i class="fas fa-wallet"></i>
-                    Connect Wallet
+
+                    {wallet ? shortAddress : 'Connect Wallet'}
                 </button>
             </header>
 
@@ -25,21 +32,15 @@ export default function home({ Connect, wallet, contract }) {
                     </div>
 
                     <div class="search-container">
-                        <input type="text" id="searchInput" class="search-input" placeholder="Search by DID..."/>
-                            <button class="search-btn" id="searchBtn">
-                                <i class="fas fa-search"></i>
-                            </button>
+                        <input type="text" id="searchInput" class="search-input" placeholder="Search by DID..." />
+                        <button class="search-btn" id="searchBtn">
+                            <i class="fas fa-search"></i>
+                        </button>
                     </div>
 
                     <div class="action-buttons">
-                        <button class="action-btn add" id="addBtn">
-                            <i class="fas fa-plus"></i> Add
-                        </button>
-                        <button class="action-btn remove" id="removeBtn">
-                            <i class="fas fa-trash"></i> Remove
-                        </button>
-                        <button class="action-btn update" id="updateBtn">
-                            <i class="fas fa-edit"></i> Update
+                        <button type="button" class="action-btn add" id="addBtn" data-bs-toggle="modal" data-bs-target="#addModal">
+                            <i class="fas fa-plus"></i> Add New DID
                         </button>
                     </div>
 
@@ -52,41 +53,10 @@ export default function home({ Connect, wallet, contract }) {
                                 <div class="identity-id">did:example:123456</div>
                             </div>
                             <div class="identity-actions">
-                                <button class="identity-btn edit">
+                                <button type="button" class="identity-btn edit" data-bs-toggle="modal" data-bs-target="#editModal">
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                <button class="identity-btn delete">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
 
-                        <div class="identity-card" data-id="did:example:789012">
-                            <div class="identity-avatar">AS</div>
-                            <div class="identity-info">
-                                <div class="identity-name">Alice Smith</div>
-                                <div class="identity-id">did:example:789012</div>
-                            </div>
-                            <div class="identity-actions">
-                                <button class="identity-btn edit">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button class="identity-btn delete">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="identity-card" data-id="did:example:345678">
-                            <div class="identity-avatar">RJ</div>
-                            <div class="identity-info">
-                                <div class="identity-name">Robert Johnson</div>
-                                <div class="identity-id">did:example:345678</div>
-                            </div>
-                            <div class="identity-actions">
-                                <button class="identity-btn edit">
-                                    <i class="fas fa-edit"></i>
-                                </button>
                                 <button class="identity-btn delete">
                                     <i class="fas fa-trash"></i>
                                 </button>
@@ -155,50 +125,64 @@ export default function home({ Connect, wallet, contract }) {
         </div>
 
             {/* <!-- Add DID Modal --> */}
-            <div class="modal" id="addModal">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3 class="modal-title">Add New DID</h3>
-                        <button class="modal-close" id="closeAddModal">&times;</button>
+
+
+            <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Add New DID</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="row g-3 needs-validation" novalidate>
+                                <div class="col-md-12 position-relative">
+                                    <label  class="form-label">Name</label>
+                                    <input type="text" class="form-control" id="validationTooltip01" value="Mark" required />
+                                </div>
+                                <div class="col-md-12 position-relative">
+                                    <label  class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="validationTooltip01" value="Mark" required />
+                                </div>
+                                <div class="col-md-6 position-relative">
+                                    <label  class="form-label">Ogranization</label>
+                                    <input type="text" class="form-control" id="validationTooltip02" value="Otto" required />
+                                </div>
+                                <div class="col-md-6 position-relative">
+                                    <label  class="form-label">Role</label>
+                                        <input type="text" class="form-control" id="validationTooltipUsername" aria-describedby="validationTooltipUsernamePrepend" required />
+                                </div>
+                                <div class="col-md-12 position-relative">
+                                    <label  class="form-label">Image</label>
+                                    <input type="file" class="form-control-file" name="" id="" required/>
+                                </div>
+
+                                <div class="modal-footer">  
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                    <form id="addForm">
-                        <div class="form-group">
-                            <label class="form-label">Full Name</label>
-                            <input type="text" class="form-input" id="addName" required/>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">DID</label>
-                            <input type="text" class="form-input" id="addDid" required/>
-                        </div>
-                        <div class="form-actions">
-                            <button type="button" class="btn btn-secondary" id="cancelAdd">Cancel</button>
-                            <button type="submit" class="btn btn-primary">Add DID</button>
-                        </div>
-                    </form>
                 </div>
             </div>
 
             {/* <!-- Update DID Modal --> */}
-            <div class="modal" id="updateModal">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3 class="modal-title">Update DID</h3>
-                        <button class="modal-close" id="closeUpdateModal">&times;</button>
+            <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">editModal title</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>
                     </div>
-                    <form id="updateForm">
-                        <div class="form-group">
-                            <label class="form-label">Full Name</label>
-                            <input type="text" class="form-input" id="updateName" required/>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">DID</label>
-                            <input type="text" class="form-input" id="updateDid" readonly/>
-                        </div>
-                        <div class="form-actions">
-                            <button type="button" class="btn btn-secondary" id="cancelUpdate">Cancel</button>
-                            <button type="submit" class="btn btn-primary">Update</button>
-                        </div>
-                    </form>
                 </div>
             </div>
         </>

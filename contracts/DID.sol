@@ -19,6 +19,7 @@ contract DIDCard is
         string image_url;
         string role;
         string org;
+        string email;
         bool isActive;
         uint256 Id;
     }
@@ -63,6 +64,7 @@ contract DIDCard is
         string memory image_url,
         string memory role,
         string memory org,
+        string memory email;
         string memory metadataURI
     ) public virtual onlyOwner {
         tokenId++;
@@ -71,6 +73,7 @@ contract DIDCard is
             image_url: image_url,
             role: role,
             org: org,
+            email: email,
             isActive: true,
             Id: tokenId
         });
@@ -104,6 +107,7 @@ contract DIDCard is
         string memory role,
         string memory org,
         bool isActive,
+        string email;
         string memory metadataURI,
         uint256 _tokenId
     ) public virtual onlyOwner {
@@ -113,6 +117,7 @@ contract DIDCard is
         user.image_url = image_url;
         user.role = role;
         user.org = org;
+        user.email = email;
         user.isActive = isActive;
 
         _setTokenURI(_tokenId, metadataURI);

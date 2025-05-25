@@ -32,7 +32,6 @@ function App() {
       }
       try {
         const provider =new JsonRpcProvider('https://mainnet.infura.io/v3/YOUR_INFURA_PROJECT_ID');
-        const accounts = await provider.listAccounts();
         const contracts = new Contract(contractAddress, ABI.abi, provider);
         setContract(contracts);
       } catch (error) {
